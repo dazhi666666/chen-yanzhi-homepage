@@ -1,78 +1,468 @@
-const skills = ['AI Agent', 'Prompt Engineering', 'Context Engineering', 'Harness Engineering', 'Loop Engineering', 'Graph Engineering'];
-
-const projects = [
-  {
-    no: '01', label: 'AI AGENT SYSTEM', title: '盯盘手 Agent 系统',
-    summary: '从原理理解到系统落地，我独立完成了一个面向证券市场的多 Agent 系统，让行情、持仓、策略与交易工具在同一套运行周期中协作。',
-    points: ['8 个 LangChain 工具', '30+ 数据模块', '46 个技术指标', '实时 SSE 推送'],
-    images: [{ src: '/trading-agent.png', alt: '盯盘手 Agent 的对话与执行界面' }, { src: '/trading-architecture.png', alt: '盯盘手系统后端核心模块列表' }],
-  },
-  {
-    no: '02', label: 'FULL-STACK PRODUCT', title: 'ModelShare 额度共享平台',
-    summary: '从购买阿里云服务器到网站正式上线，我独立走完了产品设计、开发与部署流程，把闲置 API 额度连接成可使用的模型资源。',
-    points: ['独立产品设计', '完整上线部署', '账号额度共享', '持续迭代中'], link: 'https://modelshare.cn',
-    images: [{ src: '/modelshare-home.png', alt: 'ModelShare 产品首页' }, { src: '/modelshare-dashboard.png', alt: 'ModelShare 资源共享控制台' }],
-  },
-  {
-    no: '03', label: 'OBSIDIAN PLUGIN', title: '微信公众号文章整理插件',
-    summary: '为了解决日常阅读中的信息过载，我开发了这款 Obsidian 插件：整理文章、生成摘要，再结合用户画像评分排序，筛出真正值得读的内容。',
-    points: ['文章自动整理', 'AI 摘要', '用户画像评分', '高价值内容排序'],
-    images: [{ src: '/article-settings.png', alt: '微信公众号文章整理插件设置界面' }, { src: '/article-index.png', alt: '插件生成的高分文章索引' }],
-  },
-];
-
+'use client';
+import { useRef, useState } from 'react';
+import Markdown from 'react-markdown';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import type { CSSProperties } from 'react';
+import {
+  ArrowUpRight,
+  ArrowDown,
+  ArrowRight,
+  Asterisk,
+  ChevronLeft,
+  ChevronRight,
+  X,
+  MoveUpRight,
+} from 'lucide-react';
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogDescription,
+  DialogClose,
+} from '@/components/ui/dialog';
+import projects from './projects.json';
+import ProjectDemo from './project-demo';
+import { demoIds } from './demo-data';
+type Project = (typeof projects)[number];
+const names: Record<string, string> = {
+  wukong: 'AI 投研', modelshare: '模型共享', answerplayer: 'AI 面试',
+  reading: 'AI 阅读', admissions: 'AI 志愿', tank: '多人对战', 'science-harness': 'AI 科研',
+};
+const mapOrder = projects.map((_, index) => index);
+const projectCount = String(projects.length).padStart(2, '0');
 export default function Home() {
+  const [selected, setSelected] = useState<Project | null>(null);
+  const [slide, setSlide] = useState(0);
+  const [detailTab, setDetailTab] = useState<string>('overview');
+  const dialogRef = useRef<HTMLDivElement>(null);
+  function openProject(p: Project, tab?: string) {
+    setSlide(0);
+    setSelected(p);
+    setDetailTab(tab ?? (demoIds.includes(p.id) ? 'demo' : 'overview'));
+    dialogRef.current?.scrollTo({ top: 0 });
+  }
+  function changeDetailTab(value: string) {
+    setDetailTab(value);
+    dialogRef.current?.scrollTo({ top: 0 });
+  }
   return (
-    <main>
-      <nav className="nav shell" aria-label="主要导航">
-        <a className="brand" href="#top" aria-label="返回首页">CYZ<span>●</span></a>
-        <div className="navLinks"><a href="#about">关于</a><a href="#projects">项目</a><a href="#thinking">思考</a></div>
-      </nav>
-
-      <section className="hero shell" id="top">
-        <div className="heroCopy">
-          <p className="eyebrow"><span /> AI 创造者 · 学生开发者</p>
-          <h1>你好，我是<br /><em>陈炎志。</em></h1>
-          <p className="heroLead">我正在学习如何让 AI 从对话工具，变成真正能理解任务、使用工具并持续行动的智能系统。</p>
-          <div className="heroActions">
-            <a className="primaryButton" href="#projects">看看我的项目 <b>↘</b></a>
-            <a className="textLink" href="https://modelshare.cn" target="_blank" rel="noreferrer">访问 ModelShare ↗</a>
+    <>
+      <a className="skip" href="#works">
+        跳到项目作品
+      </a>
+      <header className="header">
+        <a href="#top" className="brand" aria-label="陈炎志主页">
+          <span className="brand-mark">
+            Y<span>.</span>
+          </span>
+          <span>
+            陈炎志<span className="brand-sub">YANZHI CHEN</span>
+          </span>
+        </a>
+        <nav aria-label="主导航">
+          <a href="#works">
+            项目作品 <span>{projectCount}</span>
+          </a>
+          <a href="#about">关于我</a>
+        </nav>
+        <span className="header-note">
+          <i /> 保持好奇，持续创造
+        </span>
+      </header>
+      <main id="top">
+        <section className="hero" aria-labelledby="hero-title">
+          <div className="hero-copy">
+            <div className="eyebrow">
+              <span className="tiny-plus">+</span> A PERSONAL LAB OF AI
+              POSSIBILITIES
+            </div>
+            <h1 id="hero-title">
+              把好奇心，
+              <br />
+              <span>
+                做成真的<span className="title-stop">。</span>
+              </span>
+            </h1>
+            <div className="hero-description">
+              <span className="intro-rule" />
+              <p>
+                你好，我是陈炎志。
+                <br />用 AI 探索问题，用代码实现想法。
+                <br />
+                这里收藏着我最近两个月的 AI 创造。
+              </p>
+            </div>
+            <a className="primary-link" href="#works">
+              探索我的作品 <ArrowDown size={18} />
+            </a>
+            <div className="hero-tags">
+              <span>AI BUILDER</span>
+              <span>CURIOUS MIND</span>
+              <span>HANDS-ON</span>
+            </div>
           </div>
-        </div>
-        <div className="heroVisual" aria-hidden="true">
-          <div className="orbit orbitOne"><span>Agent</span></div><div className="orbit orbitTwo"><span>Idea</span></div>
-          <div className="core"><span>AI</span><small>BUILDING</small></div>
-          <div className="codeNote">think → build<br />→ test → loop</div>
-        </div>
-        <div className="scrollMark"><span>SCROLL</span><i /></div>
-      </section>
-
-      <section className="about shell" id="about">
-        <p className="sectionIndex">01 / ABOUT</p>
-        <div className="aboutGrid">
-          <h2>用创意提出问题，<br />用 AI 把答案做出来。</h2>
-          <div className="aboutText"><p>虽然刚刚迈入大学，我已经把大量时间投入 AI Agent 的学习与实践。我能熟练运用 Codex、ChatGPT、OpenCode、OpenClaw 等工具，并把工程方法融入真实产品。</p><p>这些项目借助 AI 完成，但每个需求、创意和产品判断都来自我自己。对我来说，技术不是终点——解决人的真实需求才是。</p></div>
-        </div>
-        <div className="skillRail" aria-label="技能列表">{skills.map((skill, index) => <span key={skill}><i>{String(index + 1).padStart(2, '0')}</i>{skill}</span>)}</div>
-      </section>
-
-      <section className="projects shell" id="projects">
-        <div className="sectionHead"><div><p className="sectionIndex">02 / SELECTED WORK</p><h2>做过的事，<br /><em>比标签更重要。</em></h2></div><p>从 Agent 系统、全栈平台到个人效率插件，<br />每一个项目都起源于我真实遇到的问题。</p></div>
-        <div className="projectList">
-          {projects.map((project) => (
-            <article className="project" key={project.no}>
-              <header className="projectHeader"><div className="projectNumber">{project.no}</div><div className="projectTitle"><p>{project.label}</p><h3>{project.title}</h3></div><p className="projectSummary">{project.summary}</p></header>
-              <div className="projectImages">{project.images.map((img, index) => <a className={`imageFrame ${index === 0 ? 'primaryImage' : 'secondaryImage'}`} href={img.src} target="_blank" key={img.src}><img src={img.src} alt={img.alt} /><span>点击查看大图 ↗</span></a>)}</div>
-              <footer className="projectFooter"><div className="tags">{project.points.map(point => <span key={point}>{point}</span>)}</div>{project.link && <a href={project.link} target="_blank" rel="noreferrer">访问项目 <b>↗</b></a>}</footer>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section className="proof shell" aria-label="学习投入"><p className="sectionIndex">03 / KEEP EXPLORING</p><div className="proofGrid"><div className="bigNumber"><strong>3</strong><span>亿</span><small>单日最高 Codex Token 使用量</small></div><blockquote>“真正的熟练，来自持续不断地<br />尝试、犯错、理解和再创造。”</blockquote></div></section>
-
-      <section className="thinking" id="thinking"><div className="shell thinkingInner"><p className="sectionIndex">04 / WHAT I BELIEVE</p><p className="quoteMark">“</p><h2>机器人终有一天会像人一样<br />理解世界，并面对多变的环境。</h2><p>我一直关注具身智能的发展。就像 ChatGPT 带来的飞跃一样，我相信机器人智慧的突破也终将到来——而它需要我们的想象、智慧与努力。</p><span className="signature">陈炎志 · 2026</span></div></section>
-      <footer className="footer shell"><a className="brand" href="#top">CYZ<span>●</span></a><p>保持好奇，持续创造。</p><a href="#top">回到顶部 ↑</a></footer>
-    </main>
+          <div className="project-map" aria-label="七个项目的探索地图">
+            <div className="map-axis axis-x" />
+            <div className="map-axis axis-y" />
+            <div className="orbit orbit-one" />
+            <div className="orbit orbit-two" />
+            <div className="map-center">
+              <Asterisk size={37} strokeWidth={1.1} />
+              <span>AI × 好奇心</span>
+              <small>START HERE</small>
+            </div>
+            <div className="map-caption">AI IDEAS → THINGS THAT WORK</div>
+            {mapOrder.map((n, i) => (
+              <a
+                className={'map-card map-card-' + i}
+                style={
+                  { '--project-color': projects[n].color } as CSSProperties
+                }
+                href={'#' + projects[n].id}
+                key={n}
+              >
+                <span className="map-label">
+                  <span className="map-dot" /> {names[projects[n].id]}
+                  <ArrowUpRight size={14} />
+                </span>
+                <img
+                  src={projects[n].cover}
+                  alt={projects[n].subtitle}
+                  loading={i > 1 ? 'lazy' : 'eager'}
+                />
+                <span className="map-card-no">EXPERIMENT / 0{n + 1}</span>
+              </a>
+            ))}
+            <span className="coordinate coord-top">+ {projectCount} DIRECTIONS</span>
+            <span className="coordinate coord-bottom">ONE CURIOUS MIND +</span>
+          </div>
+          <div className="hero-bottom">
+            <span>
+              <span className="green-dot" /> 围绕 AI · 从想法到作品
+            </span>
+            <span>RECENT TWO MONTHS / 2026</span>
+            <a href="#works" aria-label="向下查看作品">
+              <ArrowDown size={17} />
+            </a>
+          </div>
+        </section>
+        <section
+          className="works section-shell"
+          id="works"
+          aria-labelledby="works-title"
+        >
+          <div className="section-heading">
+            <div>
+              <div className="eyebrow">01 / SELECTED EXPERIMENTS</div>
+              <h2 id="works-title">
+                AI 的<span className="serif-word">七种</span>可能
+                <span className="green-dot" />
+              </h2>
+            </div>
+            <p>
+              从智能投研与科研，到多人对战中的 AI 伙伴。
+              <br />
+              七个项目，探索 AI 在不同场景中的可能。
+            </p>
+          </div>
+          <div className="projects-grid">
+            {projects.map((p, i) => (
+              <article
+                id={p.id}
+                key={p.id}
+                className={'project project-' + p.id}
+                style={{ '--project-color': p.color } as CSSProperties}
+              >
+                <button
+                  className="project-image"
+                  onClick={() => openProject(p)}
+                  aria-label={'查看' + p.title + '的项目介绍和图片'}
+                >
+                  <div className="image-topline">
+                    <span>
+                      0{i + 1} / {names[p.id]}
+                    </span>
+                    <ArrowUpRight size={21} />
+                  </div>
+                  <div className={'screenshot-wrap screenshot-' + p.id}>
+                    <img
+                      src={p.cover}
+                      alt={p.images[0].caption}
+                      loading="lazy"
+                    />
+                  </div>
+                  <span className="image-bottomline">
+                    {p.images.length.toString().padStart(2, '0')} 张项目图片{' '}
+                    <span>
+                      {demoIds.includes(p.id) ? '进入互动体验' : '打开项目'} <ArrowUpRight size={14} />
+                    </span>
+                  </span>
+                </button>
+                <div className="project-meta">
+                  <div className="eyebrow">{p.category}</div>
+                  <button
+                    className="project-title"
+                    onClick={() => openProject(p)}
+                  >
+                    <h3>{p.title}</h3>
+                    <ArrowUpRight size={24} />
+                  </button>
+                  <p>{p.line}</p>
+                  <div className="project-tags">
+                    {p.tags.map((t) => (
+                      <span key={t}>{t}</span>
+                    ))}
+                  </div>
+                  {demoIds.includes(p.id) && <button className="demo-card-link" onClick={() => openProject(p, 'demo')}>亲手试一试 <ArrowRight size={15} /></button>}
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+        <section
+          className="about section-shell"
+          id="about"
+          aria-labelledby="about-title"
+        >
+          <div className="about-side">
+            <div className="eyebrow">02 / THE MIND BEHIND</div>
+            <div className="signature">
+              Yanzhi<span>↗</span>
+            </div>
+            <span className="about-name">陈炎志 / 一个动手做的人</span>
+          </div>
+          <div className="about-copy">
+            <h2 id="about-title">
+              我喜欢让想法
+              <br />
+              有一个<span>可以打开的版本。</span>
+            </h2>
+            <p>
+              这两个月，我一直围绕 AI
+              做东西：让智能体协作投研，让模型资源流动，让阅读、表达与志愿规划更有条理，在多人对战小游戏中加入可选的机器人 Laika 对战功能，也开始搭建连接科研思考与实验执行的基础设施。七个项目，探索的是同一个问题：AI
+              能怎样进入真实的使用场景？
+            </p>
+            <p>这些项目，是我寻找答案的方式。</p>
+            <div className="about-metrics">
+              <div>
+                <strong>{projectCount}</strong>
+                <span>个 AI 项目</span>
+              </div>
+              <div>
+                <strong>02</strong>
+                <span>个月的探索</span>
+              </div>
+              <div>
+                <Asterisk size={42} strokeWidth={1} />
+                <span>好奇心未完待续</span>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section className="closing">
+          <span className="eyebrow">ALWAYS A WORK IN PROGRESS</span>
+          <p>
+            下一个想法，<span>正在发生。</span>
+            <Asterisk strokeWidth={1} />
+          </p>
+          <a href="#top">
+            回到起点 <MoveUpRight size={17} />
+          </a>
+        </section>
+      </main>
+      <footer>
+        <a href="#top" className="footer-brand">
+          陈炎志 <span>© 2026</span>
+        </a>
+        <span>MADE OF CURIOSITY & CODE</span>
+        <span>保持好奇。动手创造。</span>
+      </footer>
+      <Dialog
+        open={!!selected}
+        onOpenChange={(v) => {
+          if (!v) setSelected(null);
+        }}
+      >
+        <DialogContent
+          ref={dialogRef}
+          className={'project-dialog' + (detailTab === 'demo' ? selected?.id === 'wukong' ? ' wukong-dialog' : selected?.id === 'science-harness' ? ' science-dialog' : '' : '')}
+          showCloseButton={false}
+        >
+          {selected && (
+            <>
+              <div className="dialog-top">
+                <span className="eyebrow">
+                  PROJECT /{' '}
+                  {String(
+                    projects.findIndex((p) => p.id === selected.id) + 1,
+                  ).padStart(2, '0')}
+                </span>
+                <DialogClose className="close-button" aria-label="关闭项目">
+                  <X size={23} />
+                </DialogClose>
+              </div>
+              <div className="dialog-heading">
+                <DialogTitle className="dialog-title">
+                  {selected.title}
+                </DialogTitle>
+                <DialogDescription className="dialog-description">
+                  {selected.subtitle}
+                </DialogDescription>
+                {'repository' in selected && typeof selected.repository === 'string' && <a className="project-repository" href={selected.repository} target="_blank" rel="noreferrer">查看 GitHub 仓库 <ArrowUpRight size={14} /></a>}
+              </div>
+              <Tabs
+                value={detailTab}
+                onValueChange={(value) => changeDetailTab(String(value))}
+              >
+                <TabsList
+                  className="project-detail-tabs"
+                  aria-label="项目详情内容"
+                >
+                  {demoIds.includes(selected.id) && <TabsTrigger value="demo">互动体验</TabsTrigger>}
+                  <TabsTrigger value="overview">{selected.id === 'science-harness' ? '架构配图' : '真实截图'}</TabsTrigger>
+                  <TabsTrigger value="introduction">完整介绍</TabsTrigger>
+                </TabsList>
+                {demoIds.includes(selected.id) && <TabsContent value="demo"><ProjectDemo key={selected.id} id={selected.id} /></TabsContent>}
+                <TabsContent value="overview">
+                  <div
+                    className="gallery"
+                    onKeyDown={(e) => {
+                      if (e.key === 'ArrowRight') {
+                        e.preventDefault();
+                        setSlide((slide + 1) % selected.images.length);
+                      }
+                      if (e.key === 'ArrowLeft') {
+                        e.preventDefault();
+                        setSlide(
+                          (slide - 1 + selected.images.length) %
+                            selected.images.length,
+                        );
+                      }
+                    }}
+                  >
+                    <div className="gallery-image">
+                      <img
+                        src={selected.images[slide].src}
+                        alt={selected.images[slide].caption}
+                      />
+                    </div>
+                    <div className="gallery-controls">
+                      <span>
+                        {String(slide + 1).padStart(2, '0')} /{' '}
+                        {String(selected.images.length).padStart(2, '0')}
+                        <span className="gallery-caption">
+                          {selected.images[slide].caption}
+                        </span>
+                      </span>
+                      <div>
+                        <a
+                          className="original-link"
+                          href={selected.images[slide].src}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          查看原图 <ArrowUpRight size={14} />
+                        </a>
+                        <button
+                          aria-label="上一张"
+                          disabled={selected.images.length === 1}
+                          onClick={() =>
+                            setSlide(
+                              (slide - 1 + selected.images.length) %
+                                selected.images.length,
+                            )
+                          }
+                        >
+                          <ChevronLeft size={20} />
+                        </button>
+                        <button
+                          aria-label="下一张"
+                          disabled={selected.images.length === 1}
+                          onClick={() =>
+                            setSlide((slide + 1) % selected.images.length)
+                          }
+                        >
+                          <ChevronRight size={20} />
+                        </button>
+                      </div>
+                    </div>
+                    <div className="thumbnails" aria-label="选择项目图片">
+                      {selected.images.map((img, i) => (
+                        <button
+                          className={slide === i ? 'active' : ''}
+                          key={img.src}
+                          onClick={() => setSlide(i)}
+                          aria-label={img.caption}
+                          aria-pressed={slide === i}
+                        >
+                          <img src={img.src} alt="" loading="lazy" />
+                          <span>{String(i + 1).padStart(2, '0')}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="dialog-story">
+                    <h3>{selected.line}</h3>
+                    <p>{selected.description}</p>
+                    <div className="project-points">
+                      {selected.points.map(([title, desc], i) => (
+                        <div key={title}>
+                          <span>0{i + 1}</span>
+                          <h4>{title}</h4>
+                          <p>{desc}</p>
+                        </div>
+                      ))}
+                    </div>
+                    {selected.note && (
+                      <p className="project-note">{selected.note}</p>
+                    )}
+                  </div>
+                  <button
+                    className="read-introduction"
+                    onClick={() => changeDetailTab('introduction')}
+                  >
+                    阅读我的完整项目介绍 <ArrowRight size={18} />
+                  </button>
+                </TabsContent>
+                <TabsContent value="introduction">
+                  <div className="introduction-byline">
+                    <span>项目介绍 · 陈炎志</span>
+                    <span>原文全文</span>
+                  </div>
+                  <article
+                    className="original-introduction"
+                    aria-label={selected.subtitle + '完整介绍'}
+                  >
+                    <Markdown
+                      skipHtml
+                      components={{
+                        h1: ({ children }) => <h3>{children}</h3>,
+                        h2: ({ children }) => <h4>{children}</h4>,
+                        h3: ({ children }) => <h4>{children}</h4>,
+                      }}
+                    >
+                      {selected.originalIntroduction}
+                    </Markdown>
+                  </article>
+                </TabsContent>
+              </Tabs>
+              <button
+                className="next-project"
+                onClick={() =>
+                  openProject(
+                    projects[
+                      (projects.findIndex((p) => p.id === selected.id) + 1) %
+                        projects.length
+                    ],
+                  )
+                }
+              >
+                继续探索下一个项目 <ArrowRight size={20} />
+              </button>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }

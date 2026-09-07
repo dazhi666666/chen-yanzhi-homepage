@@ -1,34 +1,19 @@
 import type { Metadata } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
-
-const geistSans = Geist({
-  variable: '--font-geist-sans',
-  subsets: ['latin'],
-});
-
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
-  subsets: ['latin'],
-});
-
 export const metadata: Metadata = {
-  title: '陈炎志｜AI 创造者与学生开发者',
-  description: '陈炎志的个人主页：AI Agent、全栈产品与效率工具的学习和实践。',
+  title: '陈炎志 · 好奇心实验室',
+  description:
+    '把好奇心，做成真的。陈炎志的七个 AI 项目：智能投研、模型共享、面试辅助、阅读摘要、志愿规划、带有 Laika 机器人的微信多人小游戏，以及 science-harness 科研基础设施。',
+  icons: { icon: '/favicon.svg' },
 };
-
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="zh-CN">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
-      </body>
+      <body>{children}</body>
     </html>
   );
 }
