@@ -1,0 +1,14 @@
+import assert from 'node:assert/strict';
+const endpoint = 'https://yanzhi-ai-twin.giving-horse-8659.chatgpt.site/api/chat';
+const origin = 'https://dazhi666666.github.io';
+const preflight = await fetch(endpoint, { method: 'OPTIONS', headers: { Origin: origin, 'Access-Control-Request-Method': 'POST', 'Access-Control-Request-Headers': 'content-type' }, signal: AbortSignal.timeout(20000) });
+console.log('Browser preflight status:', preflight.status);
+assert.equal(preflight.status, 204);
+assert.equal(preflight.headers.get('access-control-allow-origin'), origin);
+const response = await fetch(endpoint, { method: 'POST', headers: { Origin: origin, 'Content-Type': 'application/json' }, body: JSON.stringify({ messages: [{ role: 'user', content: '你是真人吗？坦克动荡只是与机器人对战吗？请简短回答。' }] }), signal: AbortSignal.timeout(60000) });
+console.log('Chat response status:', response.status);
+assert.equal(response.status, 200);
+assert.equal(response.headers.get('access-control-allow-origin'), origin);
+const result = await response.json();
+assert.ok(typeof result.reply === 'string' && result.reply.length > 10);
+console.log('AI reply:', result.reply);
