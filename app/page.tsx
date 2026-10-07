@@ -23,6 +23,7 @@ import {
 import projects from './projects.json';
 import ProjectDemo from './project-demo';
 import PointerBackground from './pointer-background';
+import AiTwin from './ai-twin';
 import { demoIds } from './demo-data';
 import { publicAsset } from '@/lib/public-asset';
 type Project = (typeof projects)[number];
@@ -300,6 +301,7 @@ export default function Home() {
             回到起点 <MoveUpRight size={17} />
           </a>
         </section>
+        <AiTwin />
       </main>
       <footer>
         <a href="#top" className="footer-brand">

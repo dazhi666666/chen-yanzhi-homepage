@@ -44,7 +44,15 @@ Windows 本地导出建议使用 Node.js 22 LTS；Node.js 24 的 Windows 导出�
 
 项目图集支持缩略图、左右切换、查看原图、Esc 关闭及键盘焦点管理。图库中的左右方向键在图库控件获得焦点后生效。
 
-## 检查
+## AI 数字分身
+
+页面底部的 `app/ai-twin.tsx` 是真实 AI 对话，使用独立的 Sites 服务端 `/api/chat` 转发至用户指定的 ShareLLM 接口。主页继续部署在 GitHub Pages；密钥只存于 Sites 的 `AI_API_KEY` secret，不进入公开仓库或浏览器。可通过 `NEXT_PUBLIC_CHAT_ENDPOINT` 覆盖默认接口地址。
+
+`lib/ai-context.ts` 从 `app/projects.json` 提取全部八篇原始介绍与项目摘要，生成分身提示词。服务端源码位于同级 `../ai-twin-service`，项目资料变更后需重新打包此上下文至其 `context.mjs` 并重新部署服务端。每次请求附带全部项目资料和最近 12 条消息；聊天只保存在当前页面内存，刷新或点击重新聊会清空。服务端不保存聊天记录，上游服务商按自身策略处理请求。
+
+分身使用 `deepseek-v4-flash`；支持快捷问题、Markdown、多轮追问、停止和失败重试。服务端校验来源、消息角色与大小，限制输出，并提供每个实例上的尽力限频（不是全局费用上限）；费用上限需在服务商侧配置。临时密钥到期后需更新 Sites secret 并部署以应用新值。
+
+## 检查命令
 
 `npm.cmd run build` 构建项目；`npx.cmd tsc --noEmit` 检查类型。
 
@@ -55,4 +63,3 @@ Node.js 24 下执行 `node --test tests/demo-logic.test.mjs`，验证调度容�
 `node --test tests/wukong-flow.test.mjs` 验证投研分支、暂停与回放边界、历史快照隔离、策略版本与成交状态，以及流程连线和实际消息的一致性。
 
 页面没有虚构学历、任职经历和联系方式；项目描述依据提供的资料整理。图片含各项目历史界面版本，页面详情注明了适用的快照说明。
-
