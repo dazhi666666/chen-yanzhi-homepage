@@ -1,4 +1,4 @@
-export const demoIds = ['wukong', 'modelshare', 'answerplayer', 'reading', 'tank', 'science-harness'];
+export const demoIds = ['wukong', 'modelshare', 'answerplayer', 'reading', 'tank'];
 
 // A deterministic illustration of fair scheduling, not the platform's live router.
 export function distributeRequests(requests: number, enabled: boolean[]) {

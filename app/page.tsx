@@ -23,10 +23,11 @@ import {
 import projects from './projects.json';
 import ProjectDemo from './project-demo';
 import { demoIds } from './demo-data';
+import { publicAsset } from '@/lib/public-asset';
 type Project = (typeof projects)[number];
 const names: Record<string, string> = {
   wukong: 'AI 投研', modelshare: '模型共享', answerplayer: 'AI 面试',
-  reading: 'AI 阅读', admissions: 'AI 志愿', tank: '多人对战', 'science-harness': 'AI 科研',
+  reading: 'AI 阅读', admissions: 'AI 志愿', tank: '多人对战', 'science-harness': 'AI 科研', 'agent-router': 'Agent 协作',
 };
 const mapOrder = projects.map((_, index) => index);
 const projectCount = String(projects.length).padStart(2, '0');
@@ -101,7 +102,7 @@ export default function Home() {
               <span>HANDS-ON</span>
             </div>
           </div>
-          <div className="project-map" aria-label="七个项目的探索地图">
+          <div className="project-map" aria-label="八个项目的探索地图">
             <div className="map-axis axis-x" />
             <div className="map-axis axis-y" />
             <div className="orbit orbit-one" />
@@ -126,7 +127,7 @@ export default function Home() {
                   <ArrowUpRight size={14} />
                 </span>
                 <img
-                  src={projects[n].cover}
+                  src={publicAsset(projects[n].cover)}
                   alt={projects[n].subtitle}
                   loading={i > 1 ? 'lazy' : 'eager'}
                 />
@@ -155,14 +156,14 @@ export default function Home() {
             <div>
               <div className="eyebrow">01 / SELECTED EXPERIMENTS</div>
               <h2 id="works-title">
-                AI 的<span className="serif-word">七种</span>可能
+                AI 的<span className="serif-word">八种</span>可能
                 <span className="green-dot" />
               </h2>
             </div>
             <p>
               从智能投研与科研，到多人对战中的 AI 伙伴。
               <br />
-              七个项目，探索 AI 在不同场景中的可能。
+              八个项目，探索 AI 在不同场景中的可能。
             </p>
           </div>
           <div className="projects-grid">
@@ -186,7 +187,7 @@ export default function Home() {
                   </div>
                   <div className={'screenshot-wrap screenshot-' + p.id}>
                     <img
-                      src={p.cover}
+                      src={publicAsset(p.cover)}
                       alt={p.images[0].caption}
                       loading="lazy"
                     />
@@ -239,7 +240,7 @@ export default function Home() {
             </h2>
             <p>
               这两个月，我一直围绕 AI
-              做东西：让智能体协作投研，让模型资源流动，让阅读、表达与志愿规划更有条理，在多人对战小游戏中加入可选的机器人 Laika 对战功能，也开始搭建连接科研思考与实验执行的基础设施。七个项目，探索的是同一个问题：AI
+              做东西：让智能体协作投研，让模型资源流动，让阅读、表达与志愿规划更有条理，在多人对战小游戏中加入可选的机器人 Laika 对战功能，也搭建连接科研思考与实验执行的基础设施，让多个编程 Agent 组成团队。八个项目，探索的是同一个问题：AI
               能怎样进入真实的使用场景？
             </p>
             <p>这些项目，是我寻找答案的方式。</p>
@@ -285,7 +286,7 @@ export default function Home() {
       >
         <DialogContent
           ref={dialogRef}
-          className={'project-dialog' + (detailTab === 'demo' ? selected?.id === 'wukong' ? ' wukong-dialog' : selected?.id === 'science-harness' ? ' science-dialog' : '' : '')}
+          className={'project-dialog' + (selected?.id === 'wukong' && detailTab === 'demo' ? ' wukong-dialog' : '')}
           showCloseButton={false}
         >
           {selected && (
@@ -342,7 +343,7 @@ export default function Home() {
                   >
                     <div className="gallery-image">
                       <img
-                        src={selected.images[slide].src}
+                        src={publicAsset(selected.images[slide].src)}
                         alt={selected.images[slide].caption}
                       />
                     </div>
@@ -357,7 +358,7 @@ export default function Home() {
                       <div>
                         <a
                           className="original-link"
-                          href={selected.images[slide].src}
+                          href={publicAsset(selected.images[slide].src)}
                           target="_blank"
                           rel="noreferrer"
                         >
@@ -395,7 +396,7 @@ export default function Home() {
                           aria-label={img.caption}
                           aria-pressed={slide === i}
                         >
-                          <img src={img.src} alt="" loading="lazy" />
+                          <img src={publicAsset(img.src)} alt="" loading="lazy" />
                           <span>{String(i + 1).padStart(2, '0')}</span>
                         </button>
                       ))}

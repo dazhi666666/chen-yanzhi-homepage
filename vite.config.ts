@@ -35,6 +35,14 @@ const localBindingConfig = {
 };
 
 export default defineConfig(async () => {
+  // GitHub Pages serves the exported files without a Workers runtime.
+  if (process.env.GITHUB_PAGES === 'true') {
+    return {
+      base: `${process.env.NEXT_PUBLIC_BASE_PATH ?? ''}/`,
+      css: { postcss: { plugins: [tailwindcss()] } },
+      plugins: [vinext()],
+    };
+  }
   // Keep Wrangler and Miniflare state project-local. These are non-secret tool
   // settings; application environment belongs in ignored `.env*` files.
   process.env.WRANGLER_WRITE_LOGS ??= 'false';

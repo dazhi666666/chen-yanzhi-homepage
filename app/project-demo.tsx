@@ -10,12 +10,11 @@ import './project-demo.css';
 
 const TankDemo = lazy(() => import('./tank-demo'));
 const WukongDemo = lazy(() => import('./wukong-demo'));
-const ScienceDemo = lazy(() => import('./science-demo'));
 
 export default function ProjectDemo({ id }: { id: string }) {
-  return <section className={'demo-shell' + (id === 'wukong' ? ' wk-shell' : id === 'science-harness' ? ' sc-shell' : '')} aria-label="项目互动体验">
+  return <section className={'demo-shell' + (id === 'wukong' ? ' wk-shell' : '')} aria-label="项目互动体验">
     <div className="demo-disclosure"><span><i /> {id === 'tank' ? '可游玩 · 单人试玩' : '可互动 · 模拟演示'}</span><span>{id === 'tank' ? '默认摇杆 · 对战规则型 AI Laika' : '预设示例，不调用真实模型'}</span></div>
-    {id === 'science-harness' ? <Suspense fallback={<p className="tank-loading" role="status">正在准备科研实验演示…</p>}><ScienceDemo /></Suspense> : id === 'wukong' ? <Suspense fallback={<p className="tank-loading" role="status">正在准备悟空智投协作工作台…</p>}><WukongDemo /></Suspense> : id === 'modelshare' ? <SharingDemo /> : id === 'answerplayer' ? <InterviewDemo /> : id === 'reading' ? <ReadingDemo /> : id === 'tank' ? <Suspense fallback={<p className="tank-loading" role="status">正在准备坦克、迷宫和 Laika…</p>}><TankDemo /></Suspense> : null}
+    {id === 'wukong' ? <Suspense fallback={<p className="tank-loading" role="status">正在准备悟空智投协作工作台…</p>}><WukongDemo /></Suspense> : id === 'modelshare' ? <SharingDemo /> : id === 'answerplayer' ? <InterviewDemo /> : id === 'reading' ? <ReadingDemo /> : id === 'tank' ? <Suspense fallback={<p className="tank-loading" role="status">正在准备坦克、迷宫和 Laika…</p>}><TankDemo /></Suspense> : null}
   </section>;
 }
 

@@ -1,5 +1,66 @@
 [
   {
+    "id": "agent-router",
+    "title": "Agent Router",
+    "subtitle": "本地多编程 Agent 协作调度器",
+    "category": "AGENT ORCHESTRATION · 编程协作",
+    "color": "#f0b895",
+    "cover": "/projects/agent-router/workspace.png",
+    "images": [
+      {
+        "src": "/projects/agent-router/workspace.png",
+        "caption": "主代理工作台与任务报告"
+      },
+      {
+        "src": "/projects/agent-router/task-board.png",
+        "caption": "子代理对话与任务状态面板"
+      },
+      {
+        "src": "/projects/agent-router/members.png",
+        "caption": "子代理列表与会话状态"
+      },
+      {
+        "src": "/projects/agent-router/agent-selection.png",
+        "caption": "运行设置与六种主代理选择"
+      },
+      {
+        "src": "/projects/agent-router/settings.png",
+        "caption": "界面、工作步骤与用量显示设置"
+      }
+    ],
+    "caption": [
+      "主代理工作台与任务报告",
+      "子代理对话与任务状态面板",
+      "子代理列表与会话状态",
+      "运行设置与六种主代理选择",
+      "界面、工作步骤与用量显示设置"
+    ],
+    "line": "把手头的编程 AI，组织成一支团队。",
+    "description": "与主代理对话，由它拆解任务并委托其他 Agent 并行执行。Router 处理派发、任务依赖与结果收集，网页呈现任务板、信箱、完整会话和用量，让协作过程能够随时查看。",
+    "points": [
+      [
+        "多个 CLI，同一套协作协议",
+        "支持 Claude Code、ZCode、Codex、Devin、OpenCode 与 Antigravity 担任主代理，并支持运行中切换。"
+      ],
+      [
+        "任务与报告回到主对话",
+        "通过本地任务板和信箱管理任务依赖、派发与结果收集，主代理可以在委托后继续处理其他工作。"
+      ],
+      [
+        "过程和用量都可查看",
+        "查看子代理完整对话、提示词与事件流，按成员和任务汇总 token 与花费，并支持异常会话续接与合并重试。"
+      ]
+    ],
+    "tags": [
+      "多 Agent 协作",
+      "本地任务板",
+      "六种 Agent CLI"
+    ],
+    "note": "配图为项目实际运行界面的快照，包含任务失败与进程中断记录，用于展示状态追踪和排查过程。",
+    "repository": "https://github.com/dazhi666666/agent-router",
+    "originalIntroduction": "## Agent Router\r\n\r\n让本机所有的编程 AI 一起干活的调度器。\r\n\r\n把你手头的 agent CLI —— Claude Code、ZCode、Codex、Devin、OpenCode、Antigravity —— 变成一个团队。你和**主代理**对话，它把大活拆成任务派给其他 agent 并行执行，自己继续干别的；Router 负责派发、依赖管理、收割合并，子代理的报告实时回到主对话里。所有 agent 通过本地任务板和信箱协作，数据不出本机。\r\n\r\n- **聊天即用**：打开网页（`node web/server.mjs`），像用 Claude Code 一样直接说需求，该自己做的自己做，该并行的自动派活。\r\n- **谁都能当主代理**：六种 CLI 均可担任主代理，运行中可随时热切换，任务板协议不变。\r\n- **纯对话模型也能干活**：DeepSeek、Kimi 等无工具模型经本地网关跑在 Codex 里，即刻成为完整编程 agent，还能被所有成员 `consult` 请教。\r\n- **全程可见**：任务板、信箱、子代理完整对话、每个会话的提示词与事件流，网页实时可查。\r\n- **用量报表**：每个成员、每个任务的 token 消耗与花费自动汇总成账单，一页看清这次运行到底烧了谁的钱。\r\n- **失败自愈**：进程崩溃自动续接原会话，合并冲突自动 rebase 重试，不需要人盯着。\r\n\r\n一切照旧：本地运行、零依赖启动（`node router.mjs`）、git 目录可选。\r\n\r\n项目地址：\r\n\r\ngithub.com/dazhi666666/agent-router"
+  },
+  {
     "id": "science-harness",
     "title": "science-harness",
     "subtitle": "可配置、可追溯的 AI 科研基础设施",

@@ -1,6 +1,11 @@
 # 陈炎志 · 好奇心实验室
 
-个人主页，支持本地预览和 Sites 部署。站点标识保存在 `.openai/hosting.json`，部署凭据不写入项目。
+陈炎志个人主页，支持本地预览和 GitHub Pages 自动发布。
+
+- 网站：https://dazhi666666.github.io/chen-yanzhi-homepage/
+- 仓库：https://github.com/dazhi666666/chen-yanzhi-homepage
+
+推送到 `main` 后，GitHub Actions 自动检查、构建并发布。凭据不写入项目。
 
 ## 本地预览
 
@@ -8,18 +13,23 @@
 
 手动启动：在本目录执行 `npm.cmd run dev`。首次安装依赖：`npm.cmd install`。
 
+## GitHub Pages
+
+运行 `npm run build:pages` 将静态站点导出到 `dist/client`，默认使用 `/chen-yanzhi-homepage` 作为资源前缀。Actions 根据仓库名自动设置前缀；可通过 `PAGES_BASE_PATH` 覆盖（用户主页根路径可设为空字符串）。只发布 `dist/client`，不上传本地运行记录、依赖或环境文件。
+
+Windows 本地导出建议使用 Node.js 22 LTS；Node.js 24 的 Windows 导出进程可能在退出时触发 libuv 断言。Actions 使用 Node.js 22，与验证环境一致。
+
 ## 内容
 
-- `app/projects.json`：7 个 AI 项目的介绍、要点、图片顺序、图片说明与 originalIntroduction 完整原文。
+- `app/projects.json`：8 个 AI 项目的介绍、要点、图片顺序、图片说明与 originalIntroduction 完整原文。
 - `app/page.tsx`：首屏作品地图、项目展览、关于我、项目图集。
 - `app/globals.css`：米白与浅草绿主题、彩色项目卡片、桌面和手机布局、动效偏好支持；正文和交互文字采用深色提高可读性。
-- `public/projects/`：从提供的原始资料复制的 41 张项目配图，原始资料未修改。
+- `public/projects/`：从提供的原始资料复制的 46 张项目配图，原始资料未修改。
 
-science-harness、悟空智投、ModelShare、AnswerPlayer、阅读助手和坦克小游戏的详情默认进入「互动体验」，并可切换「真实截图 / 完整介绍」。志愿项目保留截图与介绍。七篇原文完整收录，保留标题、加粗与嵌套列表格式；原文资料文件未修改。
+悟空智投、ModelShare、AnswerPlayer、阅读助手和坦克小游戏的详情默认进入「互动体验」，并可切换「真实截图 / 完整介绍」。science-harness 默认展示四张架构配图，保留完整介绍和 GitHub 仓库链接；Agent Router 收录五张真实界面截图、完整介绍及 GitHub 仓库链接；志愿项目保留截图与介绍。八篇原文完整收录，保留标题、加粗与嵌套列表格式；原文资料文件未修改。
 
 ## 互动演示
 
-- science-harness：三层架构与节点、连线详情；固定输入的模拟仪器演示支持逐步采样、重复请求复用、模拟中断、核对无响应、核对恢复和产物来源追溯。实验状态仅保留在当前打开的体验中，关闭后重置。操作与预算不会因重复提交或恢复而重复登记，unknown 保留资源占用。演示是基础设施机制的简化说明，不连接原项目、真实模型或物理设备。四张架构配图均完整收录，愿景与当前 v0.1 能力分别说明，并提供用户给出的 GitHub 仓库链接。
 
 - 悟空智投：以可缩放、拖动的流程图展示角色协作，展开个股研究团队，点击节点与消息连线查看依据。支持开始、暂停、单步和时间线回看；首次研究后可注入放量突破、突发利空或冲高回落，展示条件确认、执行回执、V1/V2 策略变更、日终总结与次日记忆恢复。标的、行情和消息均为虚构预设场景，异常意图拦截是说明性演示，不连接原系统或交易服务。组件按需加载于 `app/wukong-demo.tsx`，状态与快照位于 `app/wukong-data.ts`。画布支持触屏平移，键盘方向键平移、加减缩放、0 适应视图；Tab 可进入节点和消息，回看与查看详情会暂停演示。
 - ModelShare：调整请求量，开关资源节点，观察分配与等待队列。示例采用固定容量与轮转分配，并非真实平台调度算法。
@@ -46,5 +56,3 @@ Node.js 24 下执行 `node --test tests/demo-logic.test.mjs`，验证调度容�
 
 页面没有虚构学历、任职经历和联系方式；项目描述依据提供的资料整理。图片含各项目历史界面版本，页面详情注明了适用的快照说明。
 
-
-`node --test tests/science-flow.test.mjs` 验证重复请求、中断核对、未知状态、完成后恢复与结果来源。
