@@ -1,10 +1,5 @@
 .ai-twin { display: grid; grid-template-columns: .8fr 1.2fr; gap: 64px; padding-top: 90px; padding-bottom: 100px; border-top: 1px solid var(--border); }
 .twin-persona { padding: 8px 0; }
-.twin-avatar { position: relative; width: 180px; height: 180px; margin: 38px 0 24px; border-radius: 50%; background: radial-gradient(circle at 40% 30%, #f6ffd9, #e0edca); }
-.twin-avatar svg { position: relative; width: 100%; height: 100%; border-radius: 50%; }
-.twin-orbit { position: absolute; inset: -9px; border: 1px dashed #94b471; border-radius: 50%; }
-.twin-orbit::after { content: ''; position: absolute; width: 9px; height: 9px; border-radius: 50%; top: 22px; right: 22px; background: #86aa4b; box-shadow: 0 0 0 5px #b1d67d26; }
-.twin-avatar-label { position: absolute; bottom: -5px; right: -15px; padding: 4px 11px; border-radius: 5px; background: #304b35; color: #e8f6ce; font: 11px var(--mono); letter-spacing: .08em; transform: rotate(-6deg); }
 .twin-badge { display: inline-flex; align-items: center; gap: 7px; font-size: 12px; color: #648142; margin: 8px 0 14px; }
 .twin-badge i, .twin-chat-head i { display: inline-block; width: 6px; height: 6px; background: #80a947; border-radius: 50%; }
 .twin-persona h2 { font-size: clamp(30px, 3.4vw, 46px); line-height: 1.35; letter-spacing: -.04em; font-weight: 600; }
@@ -36,13 +31,8 @@
 .twin-error { font-size: 12px; color: #9b593b; margin: 8px 0 12px; }
 .twin-thinking { display: flex; align-items: center; gap: 5px; color: #8a9c79; font-size: 12px; padding: 0 10px 18px; }
 .twin-thinking span { width: 4px; height: 4px; border-radius: 50%; background: #98b574; }
-@keyframes twin-orbit { to { transform: rotate(360deg); } }
 @keyframes twin-pulse { 50% { opacity: .35; transform: translateY(-3px); } }
-@keyframes twin-blink { 0%, 43%, 47%, 100% { scale: 1 1; } 45% { scale: 1 .1; } }
 @media (prefers-reduced-motion: no-preference) {
-  .twin-orbit { animation: twin-orbit 30s linear infinite; }
-  .is-thinking .twin-orbit { animation-duration: 5s; }
-  .twin-eyes { transform-origin: 90px 77px; animation: twin-blink 7s infinite; }
   .twin-thinking span { animation: twin-pulse 1s ease-in-out infinite; }
   .twin-thinking span:nth-child(2) { animation-delay: .15s; }
   .twin-thinking span:nth-child(3) { animation-delay: .3s; }
@@ -50,7 +40,6 @@
 @media (max-width: 760px) {
   .ai-twin { grid-template-columns: 1fr; gap: 30px; padding-top: 55px; padding-bottom: 55px; }
   .twin-persona { position: relative; }
-  .twin-avatar { float: right; width: 115px; height: 115px; margin: 40px 10px 15px 15px; }
   .twin-persona > .eyebrow { font-size: 10px; }
   .twin-persona > p { font-size: 14px; }
   .twin-knowledge { margin-top: 20px; }

@@ -59,19 +59,6 @@ export default function AiTwin() {
     <section className="ai-twin section-shell" id="ai-twin" aria-labelledby="twin-title">
       <div className="twin-persona">
         <div className="eyebrow">03 / ME, IN ANOTHER FORM</div>
-        <div className={'twin-avatar' + (busy ? ' is-thinking' : '')} aria-hidden="true">
-          <div className="twin-orbit" />
-          <svg viewBox="0 0 180 180" fill="none">
-            <path d="M35 155c4-31 24-44 55-44s51 13 55 44" fill="#aac877" />
-            <path d="M76 105v20l14 10 14-10v-20" fill="#e1c7a0" />
-            <rect x="51" y="36" width="78" height="81" rx="35" fill="#f1dfbc" />
-            <path d="M49 72c-5-29 11-49 39-49 32 0 48 22 42 48l-12-22c-22 15-35 6-44 3L49 72Z" fill="#304b35" />
-            <g stroke="#304b35" strokeWidth="3.5"><rect x="56" y="67" width="29" height="21" rx="8" /><rect x="95" y="67" width="29" height="21" rx="8" /><path d="M85 74h10" /><path d="M80 99q10 8 20 0" strokeLinecap="round" /></g>
-            <g className="twin-eyes" fill="#304b35"><circle cx="72" cy="77" r="2.8" /><circle cx="108" cy="77" r="2.8" /></g>
-            <path d="m81 150 8 7 15-17" stroke="#f8faf4" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-          <span className="twin-avatar-label">DIGITAL TWIN</span>
-        </div>
         <span className="twin-badge"><i /> AI 数字分身 · 项目向导</span>
         <h2 id="twin-title">你好，<br />我是 <span>数字分身。</span></h2>
         <p>把好奇心留给我。<br />从一个想法到一段实现，<br />聊聊这八个项目背后的故事。</p>
