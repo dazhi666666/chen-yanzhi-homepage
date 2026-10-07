@@ -1563,6 +1563,58 @@ footer > span:nth-child(2) {
     height: 30px;
   }
 }
+/* Motion enhances the page without hiding content before hydration. */
+@keyframes entrance {
+  from { opacity: 0; translate: 0 20px; }
+  to { opacity: 1; translate: 0 0; }
+}
+@keyframes orbit-turn {
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+@keyframes curiosity-turn {
+  to { transform: rotate(180deg); }
+}
+@keyframes card-float {
+  0%, 100% { translate: 0 0; }
+  50% { translate: 0 -7px; }
+}
+@keyframes scroll-nudge {
+  0%, 100% { translate: 0 0; }
+  50% { translate: 0 5px; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .hero-copy > * { animation: entrance .85s cubic-bezier(.22,1,.36,1) both; }
+  .hero-copy > :nth-child(2) { animation-delay: .08s; }
+  .hero-copy > :nth-child(3) { animation-delay: .16s; }
+  .hero-copy > :nth-child(4) { animation-delay: .24s; }
+  .hero-copy > :nth-child(5) { animation-delay: .32s; }
+  .project-map { animation: entrance 1s .15s both; }
+  .orbit-two { animation: orbit-turn 90s linear infinite; }
+  .orbit-one::after {
+    content: ''; position: absolute; top: 14%; left: 14%;
+    width: 7px; height: 7px; border-radius: 50%;
+    background: #83b843; box-shadow: 0 0 0 5px #83b84318;
+  }
+  .orbit-one { animation: orbit-turn 40s linear infinite reverse; }
+  .map-center > svg { animation: curiosity-turn 18s linear infinite; }
+  .map-card { animation: card-float 6s ease-in-out infinite; }
+  .map-card:nth-of-type(2n) { animation-delay: -2s; }
+  .map-card:nth-of-type(3n) { animation-delay: -4s; }
+  .project-map:hover .map-card,
+  .project-map:focus-within .map-card { animation-play-state: paused; }
+  .hero-bottom > a svg { animation: scroll-nudge 2s ease-in-out 4; }
+  .closing > p > svg { animation: curiosity-turn 24s linear infinite; }
+}
+.project-image { transition: background .3s, box-shadow .3s; }
+.project-image:hover { box-shadow: 0 14px 35px -20px #41632360; }
+.image-topline > svg, .primary-link > svg, .closing > a > svg {
+  transition: transform .25s cubic-bezier(.22,1,.36,1);
+}
+.project-image:hover .image-topline > svg,
+.closing > a:hover > svg { transform: translate(3px, -3px); }
+.primary-link:hover > svg { transform: translateY(3px); }
+.hero-tags > span { transition: color .2s; }
+.hero-tags > span:hover { color: #63902e; }
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

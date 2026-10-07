@@ -1,5 +1,5 @@
 'use client';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Markdown from 'react-markdown';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import type { CSSProperties } from 'react';
@@ -36,6 +36,34 @@ export default function Home() {
   const [slide, setSlide] = useState(0);
   const [detailTab, setDetailTab] = useState<string>('overview');
   const dialogRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const preference = window.matchMedia('(prefers-reduced-motion: reduce)');
+    if (!('IntersectionObserver' in window)) return;
+    const animations = new Set<Animation>();
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        observer.unobserve(entry.target);
+        if (preference.matches) return;
+        const animation = entry.target.animate(
+          [{ opacity: 0, transform: 'translateY(24px)' }, { opacity: 1, transform: 'translateY(0)' }],
+          { duration: 650, easing: 'cubic-bezier(.22,1,.36,1)' },
+        );
+        animations.add(animation);
+        animation.onfinish = () => animations.delete(animation);
+      });
+    }, { threshold: 0.08 });
+    document.querySelectorAll('.section-heading, .project, .about-side, .about-copy, .closing').forEach((element) => observer.observe(element));
+    const stopMotion = () => {
+      if (preference.matches) animations.forEach((animation) => animation.cancel());
+    };
+    preference.addEventListener('change', stopMotion);
+    return () => {
+      observer.disconnect();
+      animations.forEach((animation) => animation.cancel());
+      preference.removeEventListener('change', stopMotion);
+    };
+  }, []);
   function openProject(p: Project, tab?: string) {
     setSlide(0);
     setSelected(p);
