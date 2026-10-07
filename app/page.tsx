@@ -22,6 +22,7 @@ import {
 } from '@/components/ui/dialog';
 import projects from './projects.json';
 import ProjectDemo from './project-demo';
+import PointerBackground from './pointer-background';
 import { demoIds } from './demo-data';
 import { publicAsset } from '@/lib/public-asset';
 type Project = (typeof projects)[number];
@@ -76,6 +77,7 @@ export default function Home() {
   }
   return (
     <>
+      <PointerBackground paused={!!selected} />
       <a className="skip" href="#works">
         跳到项目作品
       </a>
