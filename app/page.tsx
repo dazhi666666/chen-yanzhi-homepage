@@ -34,6 +34,7 @@ const names: Record<string, string> = {
 };
 const mapOrder = projects.map((_, index) => index);
 const projectCount = String(projects.length).padStart(2, '0');
+const featuredIds = ['agent-router', 'science-harness'];
 export default function Home() {
   const [selected, setSelected] = useState<Project | null>(null);
   const [slide, setSlide] = useState(0);
@@ -67,8 +68,8 @@ export default function Home() {
       preference.removeEventListener('change', stopMotion);
     };
   }, []);
-  function openProject(p: Project, tab?: string) {
-    setSlide(0);
+  function openProject(p: Project, tab?: string, slideIndex = 0) {
+    setSlide(slideIndex);
     setSelected(p);
     setDetailTab(tab ?? (demoIds.includes(p.id) ? 'demo' : 'overview'));
     dialogRef.current?.scrollTo({ top: 0 });
@@ -76,6 +77,41 @@ export default function Home() {
   function changeDetailTab(value: string) {
     setDetailTab(value);
     dialogRef.current?.scrollTo({ top: 0 });
+  }
+  function renderShots(p: Project) {
+    if (p.images.length <= 1) return null;
+    const showMore = p.images.length > 5;
+    const thumbs = showMore ? p.images.slice(1, 4) : p.images.slice(1);
+    return (
+      <div className="project-shots">
+        {thumbs.map((img, i) => (
+          <button
+            className={
+              'shot' +
+              (!showMore && thumbs.length % 2 === 1 && i === thumbs.length - 1
+                ? ' shot-wide'
+                : '')
+            }
+            key={img.src}
+            onClick={() => openProject(p, 'overview', i + 1)}
+            aria-label={'查看截图：' + img.caption}
+          >
+            <img src={publicAsset(img.src)} alt={img.caption} loading="lazy" />
+            <span>{img.caption}</span>
+          </button>
+        ))}
+        {showMore && (
+          <button
+            className="shot shots-more"
+            onClick={() => openProject(p, 'overview', 4)}
+            aria-label={'查看全部 ' + p.images.length + ' 张截图'}
+          >
+            <strong>+{p.images.length - 4}</strong>
+            <span>更多截图</span>
+          </button>
+        )}
+      </div>
+    );
   }
   return (
     <>
@@ -203,7 +239,10 @@ export default function Home() {
               <article
                 id={p.id}
                 key={p.id}
-                className={'project project-' + p.id}
+                className={
+                  'project project-' + p.id +
+                  (featuredIds.includes(p.id) ? ' project-featured' : '')
+                }
                 style={{ '--project-color': p.color } as CSSProperties}
               >
                 <button
@@ -240,14 +279,28 @@ export default function Home() {
                     <h3>{p.title}</h3>
                     <ArrowUpRight size={24} />
                   </button>
-                  <p>{p.line}</p>
+                  <p className="project-line">{p.line}</p>
+                  <p className="project-desc">{p.description}</p>
+                  <div className="project-highlights">
+                    {p.points.map(([title, desc], i) => (
+                      <div key={title}>
+                        <span>0{i + 1}</span>
+                        <div>
+                          <strong>{title}</strong>
+                          <p>{desc}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                   <div className="project-tags">
                     {p.tags.map((t) => (
                       <span key={t}>{t}</span>
                     ))}
                   </div>
+                  {!featuredIds.includes(p.id) && renderShots(p)}
                   {demoIds.includes(p.id) && <button className="demo-card-link" onClick={() => openProject(p, 'demo')}>亲手试一试 <ArrowRight size={15} /></button>}
                 </div>
+                {featuredIds.includes(p.id) && renderShots(p)}
               </article>
             ))}
           </div>
