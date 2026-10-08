@@ -25,6 +25,7 @@ Windows 本地导出建议使用 Node.js 22 LTS；Node.js 24 的 Windows 导出�
 - `app/page.tsx`：首屏作品地图、项目展览、关于我、项目图集。
 - `app/globals.css`：米白与浅草绿主题、彩色项目卡片、桌面和手机布局、动效偏好支持；正文和交互文字采用深色提高可读性。
 - `public/projects/`：从提供的原始资料复制的 46 张项目配图，原始资料未修改。
+- `app/feedback.tsx` 与 `app/feedback.css`：页面底部的访客反馈表单。
 
 悟空智投、ModelShare、AnswerPlayer、阅读助手和坦克小游戏的详情默认进入「互动体验」，并可切换「真实截图 / 完整介绍」。science-harness 默认展示四张架构配图，保留完整介绍和 GitHub 仓库链接；Agent Router 收录五张真实界面截图、完整介绍及 GitHub 仓库链接；志愿项目保留截图与介绍。八篇原文完整收录，保留标题、加粗与嵌套列表格式；原文资料文件未修改。
 
@@ -46,11 +47,21 @@ Windows 本地导出建议使用 Node.js 22 LTS；Node.js 24 的 Windows 导出�
 
 ## AI 数字分身
 
-页面底部的 `app/ai-twin.tsx` 是真实 AI 对话，使用独立的 Sites 服务端 `/api/chat` 转发至用户指定的 ShareLLM 接口。主页继续部署在 GitHub Pages；密钥只存于 Sites 的 `AI_API_KEY` secret，不进入公开仓库或浏览器。可通过 `NEXT_PUBLIC_CHAT_ENDPOINT` 覆盖默认接口地址。
+页面底部的 `app/ai-twin.tsx` 是真实 AI 对话，调用自托管服务端 `https://game.dzskyid.cn/api/chat` 转发至用户指定的 ShareLLM 接口。主页继续部署在 GitHub Pages；密钥只存于服务器 `/opt/ai-twin/ai-twin.env` 的 `AI_API_KEY`（chmod 600），不进入公开仓库或浏览器。可通过 `NEXT_PUBLIC_CHAT_ENDPOINT` 覆盖默认接口地址。
 
-`lib/ai-context.ts` 从 `app/projects.json` 提取全部八篇原始介绍与项目摘要，生成分身提示词。服务端源码位于同级 `../ai-twin-service`，项目资料变更后需重新打包此上下文至其 `context.mjs` 并重新部署服务端。每次请求附带全部项目资料和最近 12 条消息；聊天只保存在当前页面内存，刷新或点击重新聊会清空。服务端不保存聊天记录，上游服务商按自身策略处理请求。
+`lib/ai-context.ts` 从 `app/projects.json` 提取全部八篇原始介绍与项目摘要，生成分身提示词。服务端源码位于同级 `../ai-twin-service`：`worker.mjs` 是核心逻辑（校验、限频、转发），`service.mjs` 是自托管 Node 入口（零依赖，反馈用 `node:sqlite` 存储）。项目资料变更后需更新 `context.mjs` 并重新部署服务端。每次请求附带全部项目资料和最近 12 条消息；聊天只保存在当前页面内存，刷新或点击重新聊会清空。服务端不保存聊天记录，上游服务商按自身策略处理请求。
 
-分身使用 `deepseek-v4-flash`；支持快捷问题、Markdown、多轮追问、停止和失败重试。服务端校验来源、消息角色与大小，限制输出，并提供每个实例上的尽力限频（不是全局费用上限）；费用上限需在服务商侧配置。临时密钥到期后需更新 Sites secret 并部署以应用新值。
+分身使用 `deepseek-v4-flash`；支持快捷问题、Markdown、多轮追问、停止和失败重试。服务端校验来源、消息角色与大小，限制输出，并按 IP 尽力限频（不是全局费用上限）；费用上限需在服务商侧配置。
+
+服务端部署在阿里云 ECS，与坦克对战服务同机：`/opt/ai-twin/releases/<日期>/` + systemd `ai-twin`（监听 127.0.0.1:8788，开机自启、崩溃自动拉起），Nginx 在 `game.dzskyid.cn` 443 下按 `/api/` 前缀反代，复用游戏站点的 Let's Encrypt 证书。日常操作：`ssh tanktrouble` 后执行 `systemctl status ai-twin`、`journalctl -u ai-twin -n 200 --no-pager`；更新时打包 `worker.mjs context.mjs service.mjs feedback-list.mjs` 解压到新 releases 目录后 `sed -i 's|releases/[0-9]*|releases/<新日期>|' /etc/systemd/system/ai-twin.service && systemctl daemon-reload && systemctl restart ai-twin`。
+
+## 反馈
+
+页面底部（AI 数字分身之后）的 `app/feedback.tsx` 是访客反馈表单：选择类型（建议 / 问题 / 喜欢 / 其他），填写内容与选填的称呼、联系方式，提交至 `https://game.dzskyid.cn/api/feedback`，写入服务器上的 SQLite（`/opt/ai-twin/data/feedback.sqlite`，在 releases 目录之外，更新部署不影响历史数据）。反馈仅站长可读：`ssh tanktrouble` 后执行 `node /opt/ai-twin/releases/20261008/feedback-list.mjs /opt/ai-twin/data/feedback.sqlite`（可加条数参数）。
+
+服务端校验类型与各字段长度（内容不超过 1000 字），仅接受主页来源，并按 IP 尽力限频（每 10 分钟 3 条）。服务未就绪时接口返回 503，表单会提示稍后再来，已填内容保留可重试。可通过 `NEXT_PUBLIC_FEEDBACK_ENDPOINT` 覆盖默认接口地址。
+
+服务端接口测试：在 `ai-twin-service` 目录运行 `node --test test.mjs`（覆盖校验、限频与存储写入）。
 
 ## 检查命令
 

@@ -24,6 +24,7 @@ import projects from './projects.json';
 import ProjectDemo from './project-demo';
 import PointerBackground from './pointer-background';
 import AiTwin from './ai-twin';
+import Feedback from './feedback';
 import { demoIds } from './demo-data';
 import { publicAsset } from '@/lib/public-asset';
 type Project = (typeof projects)[number];
@@ -302,6 +303,7 @@ export default function Home() {
           </a>
         </section>
         <AiTwin />
+        <Feedback />
       </main>
       <footer>
         <a href="#top" className="footer-brand">

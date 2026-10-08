@@ -1,0 +1,46 @@
+.feedback { display: grid; grid-template-columns: .8fr 1.2fr; gap: 64px; padding-top: 90px; padding-bottom: 110px; border-top: 1px solid var(--border); }
+.feedback-persona { padding: 8px 0; }
+.feedback-badge { display: inline-flex; align-items: center; gap: 7px; font-size: 12px; color: #648142; margin: 8px 0 14px; }
+.feedback-badge i { display: inline-block; width: 6px; height: 6px; background: #80a947; border-radius: 50%; }
+.feedback-persona h2 { font-size: clamp(30px, 3.4vw, 46px); line-height: 1.35; letter-spacing: -.04em; font-weight: 600; }
+.feedback-persona h2 span { color: #678d3f; }
+.feedback-persona > p { color: #71806a; margin-top: 22px; font-size: 15px; line-height: 1.9; }
+.feedback-note { display: flex; align-items: center; gap: 14px; margin-top: 32px; color: #526846; font-size: 13px; }
+.feedback-note > span { font: 40px var(--mono); color: #8caa65; }
+.feedback-note small { color: #87937e; }
+.feedback-card { align-self: center; min-width: 0; border: 1px solid #d6e2c7; border-radius: 20px; background: #ffffffdc; box-shadow: 0 20px 80px -35px #69874635; padding: 23px; }
+.feedback-kinds { border: 0; margin: 0 0 16px; padding: 0; min-width: 0; }
+.feedback-kinds legend { font-size: 11px; font-weight: 600; color: #60734e; margin-bottom: 9px; padding: 0; }
+.feedback-kinds em, .feedback-label em, .feedback-row label em { font-style: normal; font-weight: 400; color: #93a289; margin-left: 6px; }
+.feedback-kinds > div { display: flex; flex-wrap: wrap; gap: 7px; }
+.feedback-kinds button { display: flex; align-items: center; padding: 8px 13px; border: 1px solid #dde7d0; border-radius: 8px; font-size: 12px; color: #688250; transition: background .2s; }
+.feedback-kinds button:hover { background: #eef6df; }
+.feedback-kinds button.active { background: #e1efc6; border-color: #b9d488; color: #44672f; }
+.feedback-label, .feedback-row label { display: block; font-size: 11px; font-weight: 600; color: #60734e; margin-bottom: 8px; }
+.feedback-card textarea, .feedback-card input { width: 100%; border: 1px solid #cdddba; background: #fafcf7; border-radius: 12px; padding: 12px 14px; font: inherit; font-size: 14px; line-height: 1.6; color: #304b35; outline: none; }
+.feedback-card textarea { resize: vertical; min-height: 112px; }
+.feedback-card :is(textarea, input):focus { border-color: #90b365; box-shadow: 0 0 0 3px #b4d78a20; }
+.feedback-card :is(textarea, input)::placeholder { color: #a3b199; }
+.feedback-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 13px; }
+.feedback-error { font-size: 12px; color: #9b593b; margin-top: 12px; }
+.feedback-actions { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 15px; }
+.feedback-submit { display: inline-flex; align-items: center; gap: 8px; padding: 11px 21px; border-radius: 10px; background: var(--highlight); color: #345322; font-weight: 600; font-size: 13px; transition: transform .15s, box-shadow .2s; }
+.feedback-submit:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 10px 22px -12px #7ea53d90; }
+.feedback-count { font: 11px var(--mono); color: #93a289; }
+.feedback-done { text-align: center; padding: 30px 10px 26px; }
+.feedback-done-icon { display: grid; place-items: center; width: 52px; height: 52px; margin: 0 auto 16px; border-radius: 50%; background: #e1efc6; color: #44672f; }
+.feedback-done h3 { font-size: 19px; color: #2c4426; }
+.feedback-done p { color: #71806a; font-size: 13px; margin: 8px 0 19px; }
+.feedback-done button { display: inline-flex; align-items: center; gap: 6px; padding: 9px 16px; border: 1px solid #cdddba; border-radius: 9px; font-size: 12px; color: #5b7a41; transition: background .2s; }
+.feedback-done button:hover { background: #eef6df; }
+.feedback-disclosure { font-size: 10px; color: #8a9682; line-height: 1.7; margin-top: 14px; }
+@media (max-width: 760px) {
+  .feedback { grid-template-columns: 1fr; gap: 30px; padding-top: 55px; padding-bottom: 60px; }
+  .feedback-persona > .eyebrow { font-size: 10px; }
+  .feedback-persona > p { font-size: 14px; }
+  .feedback-note { margin-top: 20px; }
+  .feedback-card { padding: 16px; border-radius: 14px; }
+  .feedback-row { grid-template-columns: 1fr; }
+  .feedback-card textarea { font-size: 16px; }
+  .feedback-card input { font-size: 16px; }
+}

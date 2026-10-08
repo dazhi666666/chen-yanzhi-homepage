@@ -25,7 +25,7 @@ export default function AiTwin() {
   async function ask(question = input) {
     const text = question.trim();
     if (!text || controller.current || text.length > 1500) return;
-    const endpoint = process.env.NEXT_PUBLIC_CHAT_ENDPOINT || 'https://yanzhi-ai-twin.giving-horse-8659.chatgpt.site/api/chat';
+    const endpoint = process.env.NEXT_PUBLIC_CHAT_ENDPOINT || 'https://game.dzskyid.cn/api/chat';
     const next: Message[] = [...messages, { role: 'user', content: text }];
     setMessages(next);
     setInput('');
