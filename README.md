@@ -51,7 +51,7 @@ Windows 本地导出建议使用 Node.js 22 LTS；Node.js 24 的 Windows 导出�
 
 `lib/ai-context.ts` 从 `app/projects.json` 提取全部八篇原始介绍与项目摘要，生成分身提示词。服务端源码位于同级 `../ai-twin-service`：`worker.mjs` 是核心逻辑（校验、限频、转发），`service.mjs` 是自托管 Node 入口（零依赖，反馈用 `node:sqlite` 存储）。项目资料变更后需更新 `context.mjs` 并重新部署服务端。每次请求附带全部项目资料和最近 12 条消息；聊天只保存在当前页面内存，刷新或点击重新聊会清空。服务端不保存聊天记录，上游服务商按自身策略处理请求。
 
-分身使用 `deepseek-v4-flash`；支持快捷问题、Markdown、多轮追问、停止和失败重试。服务端校验来源、消息角色与大小，限制输出，并按 IP 尽力限频（不是全局费用上限）；费用上限需在服务商侧配置。
+分身使用 `deepseek-v4-flash`；回答为流式显示（客户端请求带 `stream: true`，服务端把上游 SSE 增量转成纯文本流转发，`X-Accel-Buffering: no` 穿透 nginx 缓冲；旧版服务端返回 JSON 时自动回退整段显示）。支持快捷问题、Markdown、多轮追问、停止和失败重试。服务端校验来源、消息角色与大小，限制输出，并按 IP 尽力限频（不是全局费用上限）；费用上限需在服务商侧配置。
 
 服务端部署在阿里云 ECS，与坦克对战服务同机：`/opt/ai-twin/releases/<日期>/` + systemd `ai-twin`（监听 127.0.0.1:8788，开机自启、崩溃自动拉起），Nginx 在 `game.dzskyid.cn` 443 下按 `/api/` 前缀反代，复用游戏站点的 Let's Encrypt 证书。日常操作：`ssh tanktrouble` 后执行 `systemctl status ai-twin`、`journalctl -u ai-twin -n 200 --no-pager`；更新时打包 `worker.mjs context.mjs service.mjs feedback-list.mjs` 解压到新 releases 目录后 `sed -i 's|releases/[0-9]*|releases/<新日期>|' /etc/systemd/system/ai-twin.service && systemctl daemon-reload && systemctl restart ai-twin`。
 

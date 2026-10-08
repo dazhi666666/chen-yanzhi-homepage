@@ -34,22 +34,43 @@ export default function AiTwin() {
     nearBottom.current = true;
     const request = new AbortController();
     controller.current = request;
-    const timeout = window.setTimeout(() => request.abort('timeout'), 60000);
+    let timeout = window.setTimeout(() => request.abort('timeout'), 60000);
+    const keepAlive = () => {
+      window.clearTimeout(timeout);
+      timeout = window.setTimeout(() => request.abort('timeout'), 45000);
+    };
     try {
       const response = await fetch(endpoint, {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: next.slice(-12) }), signal: request.signal,
+        body: JSON.stringify({ messages: next.slice(-12), stream: true }), signal: request.signal,
       });
-      if (!response.ok) throw new Error(response.status === 429 ? '提问有点频繁，请稍等一分钟再试。' : '暂时没能连接 AI，请稍后重试。');
-      const result = await response.json() as { reply?: string };
-      if (!result.reply?.trim()) throw new Error('AI 暂时没有返回回答，请再试一次。');
-      setMessages([...next, { role: 'assistant', content: result.reply }]);
+      if (response.ok && response.headers.get('Content-Type')?.includes('text/plain') && response.body) {
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+        let answer = '';
+        const render = () => setMessages([...next, { role: 'assistant', content: answer }]);
+        render();
+        while (true) {
+          const { value, done } = await reader.read();
+          if (done) break;
+          answer += decoder.decode(value, { stream: true });
+          keepAlive();
+          render();
+        }
+        if (!answer.trim()) throw new Error('AI 暂时没有返回回答，请再试一次。');
+        render();
+      } else {
+        const result = await response.json() as { reply?: string };
+        if (!response.ok) throw new Error(response.status === 429 ? '提问有点频繁，请稍等一分钟再试。' : '暂时没能连接 AI，请稍后重试。');
+        if (!result.reply?.trim()) throw new Error('AI 暂时没有返回回答，请再试一次。');
+        setMessages([...next, { role: 'assistant', content: result.reply }]);
+      }
     } catch (cause) {
       setMessages(messages);
       setInput(text);
       setError(request.signal.aborted ? (request.signal.reason === 'timeout' ? '回答等待超时，问题已保留，可以重试。' : '已停止，问题已保留。') : cause instanceof Error ? cause.message : '连接失败，请重试。');
     } finally {
-      clearTimeout(timeout);
+      window.clearTimeout(timeout);
       controller.current = null;
       setBusy(false);
     }
@@ -65,11 +86,11 @@ export default function AiTwin() {
         <div className="twin-knowledge"><span>08</span><div>个项目的完整介绍<br /><small>作为每次回答的参考</small></div></div>
       </div>
       <div className="twin-chat">
-        <div className="twin-chat-head"><span><i /> {busy ? '正在翻阅项目、组织回答…' : '关于作品，尽管问我'}</span><button type="button" disabled={busy || !messages.length} onClick={() => { setMessages([]); setError(''); inputRef.current?.focus(); }} aria-label="清空当前对话"><RotateCcw size={16} /> 重新聊</button></div>
+        <div className="twin-chat-head"><span><i /> {busy ? (messages.at(-1)?.role === 'assistant' ? '正在输入…' : '正在翻阅项目、组织回答…') : '关于作品，尽管问我'}</span><button type="button" disabled={busy || !messages.length} onClick={() => { setMessages([]); setError(''); inputRef.current?.focus(); }} aria-label="清空当前对话"><RotateCcw size={16} /> 重新聊</button></div>
         <div className="twin-conversation" ref={conversation} role="log" aria-label="与 AI 分身的对话" aria-live="polite" onScroll={(event) => { const el = event.currentTarget; nearBottom.current = el.scrollHeight - el.scrollTop - el.clientHeight < 90; }}>
           <div className="twin-message assistant"><span className="twin-speaker">数字分身</span><p>欢迎来到我的好奇心实验室！我可以根据陈炎志的项目介绍，聊聊各个作品解决的问题、技术思路和使用场景。你想先了解哪一个？</p></div>
           {messages.map((message, index) => <div key={index} className={'twin-message ' + message.role}><span className="twin-speaker">{message.role === 'user' ? '你' : '数字分身'}</span><Markdown components={{ a: ({ href, children }) => <a href={href} target={href?.startsWith('#') ? undefined : '_blank'} rel="noopener noreferrer">{children}</a> }}>{message.content}</Markdown></div>)}
-          {busy && <div className="twin-thinking" role="status"><span /><span /><span /> 正在思考</div>}
+          {busy && messages.at(-1)?.role !== 'assistant' && <div className="twin-thinking" role="status"><span /><span /><span /> 正在思考</div>}
         </div>
         {!messages.length && <div className="twin-suggestions">{suggestions.map((question) => <button key={question} disabled={busy} onClick={() => void ask(question)}>{question}<ArrowUpRight size={14} /></button>)}</div>}
         {error && <p className="twin-error" role="alert">{error}</p>}
