@@ -17,8 +17,6 @@ const endpoint = process.env.NEXT_PUBLIC_FEEDBACK_ENDPOINT || 'https://game.dzsk
 export default function Feedback() {
   const [kind, setKind] = useState<Kind>('suggestion');
   const [message, setMessage] = useState('');
-  const [name, setName] = useState('');
-  const [contact, setContact] = useState('');
   const [sending, setSending] = useState(false);
   const [done, setDone] = useState(false);
   const [error, setError] = useState('');
@@ -37,7 +35,7 @@ export default function Feedback() {
       const response = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ type: kind, message: text, name: name.trim(), contact: contact.trim() }),
+        body: JSON.stringify({ type: kind, message: text }),
         signal: request.signal,
       });
       if (!response.ok) {
@@ -62,8 +60,6 @@ export default function Feedback() {
     setDone(false);
     setKind('suggestion');
     setMessage('');
-    setName('');
-    setContact('');
     setError('');
   }
 
@@ -139,32 +135,6 @@ export default function Feedback() {
               placeholder="哪里让你停留了一下？哪里希望更好？随便写。"
               onChange={(event) => setMessage(event.target.value)}
             />
-            <div className="feedback-row">
-              <div>
-                <label htmlFor="feedback-name">
-                  怎么称呼你 <em>选填</em>
-                </label>
-                <input
-                  id="feedback-name"
-                  value={name}
-                  maxLength={30}
-                  placeholder="昵称就好"
-                  onChange={(event) => setName(event.target.value)}
-                />
-              </div>
-              <div>
-                <label htmlFor="feedback-contact">
-                  联系方式 <em>选填</em>
-                </label>
-                <input
-                  id="feedback-contact"
-                  value={contact}
-                  maxLength={80}
-                  placeholder="邮箱 / 微信，方便回复"
-                  onChange={(event) => setContact(event.target.value)}
-                />
-              </div>
-            </div>
             {error && (
               <p className="feedback-error" role="alert">
                 {error}
@@ -184,7 +154,7 @@ export default function Feedback() {
             </div>
           </form>
         )}
-        <p className="feedback-disclosure">反馈只会发给站长本人，不会公开展示；如需回复请留下联系方式，请勿填写敏感信息。</p>
+        <p className="feedback-disclosure">反馈只会发给站长本人，不会公开展示；请勿填写敏感信息。</p>
       </div>
     </section>
   );

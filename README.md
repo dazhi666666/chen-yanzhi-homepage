@@ -57,7 +57,7 @@ Windows 本地导出建议使用 Node.js 22 LTS；Node.js 24 的 Windows 导出�
 
 ## 反馈
 
-页面底部（AI 数字分身之后）的 `app/feedback.tsx` 是访客反馈表单：选择类型（建议 / 问题 / 喜欢 / 其他），填写内容与选填的称呼、联系方式，提交至 `https://game.dzskyid.cn/api/feedback`，写入服务器上的 SQLite（`/opt/ai-twin/data/feedback.sqlite`，在 releases 目录之外，更新部署不影响历史数据）。反馈仅站长可读：`ssh tanktrouble` 后执行 `node /opt/ai-twin/releases/20261008/feedback-list.mjs /opt/ai-twin/data/feedback.sqlite`（可加条数参数）。
+页面底部（AI 数字分身之后）的 `app/feedback.tsx` 是访客反馈表单：选择类型（建议 / 问题 / 喜欢 / 其他），填写内容后即可提交至 `https://game.dzskyid.cn/api/feedback`，写入服务器上的 SQLite（`/opt/ai-twin/data/feedback.sqlite`，在 releases 目录之外，更新部署不影响历史数据）。反馈仅站长可读：`ssh tanktrouble` 后执行 `node /opt/ai-twin/releases/20261008/feedback-list.mjs /opt/ai-twin/data/feedback.sqlite`（可加条数参数）。
 
 服务端校验类型与各字段长度（内容不超过 1000 字），仅接受主页来源，并按 IP 尽力限频（每 10 分钟 3 条）。服务未就绪时接口返回 503，表单会提示稍后再来，已填内容保留可重试。可通过 `NEXT_PUBLIC_FEEDBACK_ENDPOINT` 覆盖默认接口地址。
 

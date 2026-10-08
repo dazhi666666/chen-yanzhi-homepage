@@ -11,17 +11,15 @@
 .feedback-card { align-self: center; min-width: 0; border: 1px solid #d6e2c7; border-radius: 20px; background: #ffffffdc; box-shadow: 0 20px 80px -35px #69874635; padding: 23px; }
 .feedback-kinds { border: 0; margin: 0 0 16px; padding: 0; min-width: 0; }
 .feedback-kinds legend { font-size: 11px; font-weight: 600; color: #60734e; margin-bottom: 9px; padding: 0; }
-.feedback-kinds em, .feedback-label em, .feedback-row label em { font-style: normal; font-weight: 400; color: #93a289; margin-left: 6px; }
+.feedback-kinds em, .feedback-label em { font-style: normal; font-weight: 400; color: #93a289; margin-left: 6px; }
 .feedback-kinds > div { display: flex; flex-wrap: wrap; gap: 7px; }
 .feedback-kinds button { display: flex; align-items: center; padding: 8px 13px; border: 1px solid #dde7d0; border-radius: 8px; font-size: 12px; color: #688250; transition: background .2s; }
 .feedback-kinds button:hover { background: #eef6df; }
 .feedback-kinds button.active { background: #e1efc6; border-color: #b9d488; color: #44672f; }
-.feedback-label, .feedback-row label { display: block; font-size: 11px; font-weight: 600; color: #60734e; margin-bottom: 8px; }
-.feedback-card textarea, .feedback-card input { width: 100%; border: 1px solid #cdddba; background: #fafcf7; border-radius: 12px; padding: 12px 14px; font: inherit; font-size: 14px; line-height: 1.6; color: #304b35; outline: none; }
-.feedback-card textarea { resize: vertical; min-height: 112px; }
-.feedback-card :is(textarea, input):focus { border-color: #90b365; box-shadow: 0 0 0 3px #b4d78a20; }
-.feedback-card :is(textarea, input)::placeholder { color: #a3b199; }
-.feedback-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 13px; }
+.feedback-label { display: block; font-size: 11px; font-weight: 600; color: #60734e; margin-bottom: 8px; }
+.feedback-card textarea { width: 100%; border: 1px solid #cdddba; background: #fafcf7; border-radius: 12px; padding: 12px 14px; font: inherit; font-size: 14px; line-height: 1.6; color: #304b35; outline: none; resize: vertical; min-height: 112px; }
+.feedback-card textarea:focus { border-color: #90b365; box-shadow: 0 0 0 3px #b4d78a20; }
+.feedback-card textarea::placeholder { color: #a3b199; }
 .feedback-error { font-size: 12px; color: #9b593b; margin-top: 12px; }
 .feedback-actions { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 15px; }
 .feedback-submit { display: inline-flex; align-items: center; gap: 8px; padding: 11px 21px; border-radius: 10px; background: var(--highlight); color: #345322; font-weight: 600; font-size: 13px; transition: transform .15s, box-shadow .2s; }
@@ -40,7 +38,5 @@
   .feedback-persona > p { font-size: 14px; }
   .feedback-note { margin-top: 20px; }
   .feedback-card { padding: 16px; border-radius: 14px; }
-  .feedback-row { grid-template-columns: 1fr; }
   .feedback-card textarea { font-size: 16px; }
-  .feedback-card input { font-size: 16px; }
 }
