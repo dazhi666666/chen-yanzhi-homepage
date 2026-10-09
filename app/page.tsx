@@ -281,26 +281,14 @@ export default function Home() {
                   </button>
                   <p className="project-line">{p.line}</p>
                   <p className="project-desc">{p.description}</p>
-                  <div className="project-highlights">
-                    {p.points.map(([title, desc], i) => (
-                      <div key={title}>
-                        <span>0{i + 1}</span>
-                        <div>
-                          <strong>{title}</strong>
-                          <p>{desc}</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
                   <div className="project-tags">
                     {p.tags.map((t) => (
                       <span key={t}>{t}</span>
                     ))}
                   </div>
-                  {!featuredIds.includes(p.id) && renderShots(p)}
+                  {renderShots(p)}
                   {demoIds.includes(p.id) && <button className="demo-card-link" onClick={() => openProject(p, 'demo')}>亲手试一试 <ArrowRight size={15} /></button>}
                 </div>
-                {featuredIds.includes(p.id) && renderShots(p)}
               </article>
             ))}
           </div>

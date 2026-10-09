@@ -627,27 +627,19 @@ svg {
   grid-column: 1 / -1;
   display: grid;
   grid-template-columns: 1.15fr 1fr;
-  gap: 22px 33px;
+  gap: 33px;
   padding: 22px;
   border-radius: 8px;
 }
-.project-featured .project-image { height: auto; min-height: 340px; }
-.project-featured .project-meta {
-  grid-row: 1 / 3;
-  align-self: center;
-  padding: 15px 18px 15px 0;
-}
-.project-featured .project-shots {
-  grid-column: 1;
-  grid-row: 2;
-  margin-top: 0;
-  align-self: start;
-}
+.project-featured .project-image { height: auto; min-height: 340px; align-self: stretch; }
+.project-featured .project-meta { align-self: center; padding: 15px 18px 15px 0; }
 .project-science-harness { border: 1px solid #d2e7e1; background: #f0f8f4; }
 .project-science-harness .project-image { background: #d9f0ed; }
 .project-agent-router { border: 1px solid #ecd8bd; background: #fbf4e8; }
 .project-science-harness .screenshot-science-harness { top: 57px; left: 10%; right: 10%; transform: rotate(-2deg); }
 .project-science-harness .screenshot-science-harness img { height: 253px; object-fit: contain; background: #fff; }
+.project-featured .screenshot-wrap { top: 50%; transform: translateY(-54%) rotate(-3deg); }
+.project-featured .project-image:hover .screenshot-wrap { transform: translateY(-54%) rotate(0) scale(1.03); }
 .project-repository { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; color: #367d7d; margin-top: 12px; }
 .project-repository:hover { text-decoration: underline; }
 @media (max-width: 760px) {
@@ -656,9 +648,10 @@ svg {
   .map-card-7 { bottom: -150px; }
   .project-map .coord-bottom { bottom: -176px; }
   .project-featured { grid-template-columns: 1fr; gap: 5px; padding: 12px; }
-  .project-featured .project-image { grid-row: auto; height: 280px; min-height: 0; }
-  .project-featured .project-meta { grid-row: auto; padding: 15px 5px 9px; }
-  .project-featured .project-shots { grid-row: auto; margin-top: 10px; }
+  .project-featured .project-image { height: 280px; min-height: 0; }
+  .project-featured .project-meta { padding: 15px 5px 9px; }
+  .project-featured .screenshot-wrap { top: 67px; transform: rotate(-3deg); }
+  .project-featured .project-image:hover .screenshot-wrap { transform: rotate(0) translateY(-6px) scale(1.03); }
   .project-science-harness .screenshot-science-harness img { height: 211px; }
 }
 .image-topline {
@@ -788,37 +781,6 @@ svg {
   color: #46543d;
   line-height: 1.85;
   margin-top: 12px;
-}
-.project-highlights {
-  margin-top: 17px;
-  padding-top: 15px;
-  border-top: 1px dashed #cfdcc0;
-  display: grid;
-  gap: 11px;
-}
-.project-highlights > div {
-  display: flex;
-  gap: 11px;
-  align-items: baseline;
-}
-.project-highlights > div > span {
-  font-family: var(--mono);
-  font-size: 10px;
-  color: #93a87b;
-  flex-shrink: 0;
-}
-.project-highlights strong {
-  display: block;
-  font-size: 13px;
-  font-weight: 600;
-  color: #3d4c34;
-  letter-spacing: -0.01em;
-}
-.project-highlights p {
-  font-size: 12.5px;
-  color: #5b7051;
-  line-height: 1.75;
-  margin-top: 3px;
 }
 .project-shots {
   margin-top: 19px;
