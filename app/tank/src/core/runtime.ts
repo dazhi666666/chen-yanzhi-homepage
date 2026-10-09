@@ -118,6 +118,7 @@ export class Match {
     r.scopeCross=new Clip(this,null,'scopeCross');r.scopeCircle=new Clip(this,null,'scopeCircle');
     r.settingsMaxBullets=5;r.settingsMaxCrates=3;r.settingsCrateSpawnModifier=1;r.settingsActiveWeapons=this.config.weapons;r.TANKS=config.players.length;
     installCore(r,this.environment(r));
+    r.BULLETSPEED=6;// Demo pacing: faster shells than the ported default of 4.5.
     const setWeapon=r.setWeapon;
     r.setWeapon=(owner:Clip,weapon:string)=>{
       // Shield is equipment in the original, never a weapon that replaces the fire action.
