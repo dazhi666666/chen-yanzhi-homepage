@@ -763,13 +763,27 @@ svg {
   letter-spacing: -0.035em;
   line-height: 1.35;
 }
-.project-title > svg {
+.project-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  font-size: 12.5px;
   color: #71885b;
-  transition: transform 0.2s;
+  transition: color 0.2s;
 }
-.project-title:hover > svg {
-  transform: translate(3px, -3px);
+.project-more > svg {
+  color: #71885b;
+  transition:
+    transform 0.2s,
+    color 0.2s;
+}
+.project-title:hover .project-more,
+.project-title:hover .project-more > svg {
   color: var(--primary);
+}
+.project-title:hover .project-more > svg {
+  transform: translate(3px, -3px);
 }
 .project-meta > .project-line {
   font-size: 14px;

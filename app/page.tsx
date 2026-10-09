@@ -277,7 +277,10 @@ export default function Home() {
                     onClick={() => openProject(p)}
                   >
                     <h3>{p.title}</h3>
-                    <ArrowUpRight size={24} />
+                    <span className="project-more">
+                      查看详情
+                      <ArrowUpRight size={17} />
+                    </span>
                   </button>
                   <p className="project-line">{p.line}</p>
                   <p className="project-desc">{p.description}</p>
